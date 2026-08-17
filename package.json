@@ -1,0 +1,36 @@
+{
+  "name": "cue-validator",
+  "displayName": "CUE Validator",
+  "description": "Validate YAML, JSON, TOML, and related data files against a local .cue schema.",
+  "publisher": "rxsystms",
+  "categories": [ "Linters" ],
+  "version": "0.0.1",
+  "icon": "resources/logo.png",
+  "repository": "https://github.com/rxsystms/cue-validator",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:cue-validator.validateCurrentFile"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "cue-validator.validateCurrentFile",
+        "title": "Validate current file with CUE"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.5.4"
+  }
+}
