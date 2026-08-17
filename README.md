@@ -10,7 +10,7 @@ npm i
 npm run compile
 
 # run local development server with:
-cd ~/repos/_rex/cue-validator
+cd cue-validator
 code --extensionDevelopmentPath="$PWD"
 
 
@@ -20,7 +20,7 @@ code --extensionDevelopmentPath="$PWD"
 
 # publish with:
 # registered at: https://marketplace.visualstudio.com/manage
-# https://dev.azure.com/eamonn0064/_usersSettings/tokens
+# https://dev.azure.com/{username}/_usersSettings/tokens
 # See: https://code.visualstudio.com/api/working-with-extensions/publishing-extension#secure-automated-publishing-to-visual-studio-marketplace
 npm install -g @vscode/vsce
 # install az cli: https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?view=azure-cli-latest&pivots=apt
