@@ -116,6 +116,18 @@ function parseCueDiagnostics(output: string, targetPath: string): vscode.Diagnos
   const target = path.resolve(targetPath)
   const lines = output.split(/\r?\n/)
 
+  const addDiagnostic = (message: string, lineNumber = 1, columnNumber = 1): void => {
+    const rangeStartLine = Math.max(0, lineNumber - 1)
+    const rangeStartColumn = Math.max(0, columnNumber - 1)
+    const range = new vscode.Range(
+      rangeStartLine,
+      rangeStartColumn,
+      rangeStartLine,
+      Math.max(rangeStartColumn + 1, rangeStartColumn + 2),
+    )
+    diagnostics.push(new vscode.Diagnostic(range, message, vscode.DiagnosticSeverity.Error))
+  }
+
   for (let index = 0; index < lines.length; index += 1) {
     const line = lines[index]
 
@@ -131,19 +143,11 @@ function parseCueDiagnostics(output: string, targetPath: string): vscode.Diagnos
       }
 
       const resolvedFile = path.resolve(filePath)
-      if (resolvedFile !== target) {
-        continue
-      }
-
-      const rangeStartLine = Math.max(0, lineNumber - 1)
-      const rangeStartColumn = Math.max(0, columnNumber - 1)
-      const range = new vscode.Range(
-        rangeStartLine,
-        rangeStartColumn,
-        rangeStartLine,
-        Math.max(rangeStartColumn + 1, rangeStartColumn + 2),
+      addDiagnostic(
+        message,
+        resolvedFile === target ? lineNumber : 1,
+        resolvedFile === target ? columnNumber : 1,
       )
-      diagnostics.push(new vscode.Diagnostic(range, message, vscode.DiagnosticSeverity.Error))
       continue
     }
 
@@ -154,10 +158,6 @@ function parseCueDiagnostics(output: string, targetPath: string): vscode.Diagnos
 
     const filePath = locationMatch[1]
     const resolvedFile = path.resolve(filePath)
-    if (resolvedFile !== target) {
-      continue
-    }
-
     let message = 'CUE validation error'
     for (let previousIndex = index - 1; previousIndex >= 0; previousIndex -= 1) {
       const candidate = lines[previousIndex].trim()
@@ -173,17 +173,9 @@ function parseCueDiagnostics(output: string, targetPath: string): vscode.Diagnos
       break
     }
 
-    const lineNumber = Number(locationMatch[2])
-    const columnNumber = Number(locationMatch[3])
-    const rangeStartLine = Math.max(0, lineNumber - 1)
-    const rangeStartColumn = Math.max(0, columnNumber - 1)
-    const range = new vscode.Range(
-      rangeStartLine,
-      rangeStartColumn,
-      rangeStartLine,
-      Math.max(rangeStartColumn + 1, rangeStartColumn + 2),
-    )
-    diagnostics.push(new vscode.Diagnostic(range, message, vscode.DiagnosticSeverity.Error))
+    const lineNumber = resolvedFile === target ? Number(locationMatch[2]) : 1
+    const columnNumber = resolvedFile === target ? Number(locationMatch[3]) : 1
+    addDiagnostic(message, lineNumber, columnNumber)
   }
 
   return diagnostics
