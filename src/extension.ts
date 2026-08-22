@@ -5,6 +5,7 @@ import * as vscode from 'vscode'
 
 const SUPPORTED_LANGUAGES = new Set(['yaml', 'yml', 'json', 'toml', 'plaintext'])
 const SUPPORTED_EXTENSIONS = new Set(['.yaml', '.yml', '.json', '.toml', '.repl'])
+const EXCLUDED_FILENAMES = new Set(['package.json', 'tsconfig.json'])
 const diagnosticCollection = vscode.languages.createDiagnosticCollection('cue-validator')
 
 function detectCueBinary(): string {
@@ -23,6 +24,10 @@ function detectCueBinary(): string {
 
 function supportsDocument(document: vscode.TextDocument): boolean {
   if (document.uri.scheme !== 'file') {
+    return false
+  }
+
+  if (EXCLUDED_FILENAMES.has(path.basename(document.fileName))) {
     return false
   }
 
@@ -50,57 +55,32 @@ async function findCueSchema(document: vscode.TextDocument): Promise<string | un
     return undefined
   }
 
-  const workspaceRoot = (vscode.workspace.workspaceFolders ?? [])
-    .map((folder) => path.resolve(folder.uri.fsPath))
-    .find((root) => {
-      const resolvedPath = path.resolve(document.fileName)
-      const relative = path.relative(root, resolvedPath)
-      return relative === '' || (!relative.startsWith('..') && !path.isAbsolute(relative))
-    })
+  const currentDir = path.dirname(path.resolve(document.fileName))
 
-  if (!workspaceRoot) {
-    return undefined
-  }
-
-  let currentDir = path.dirname(path.resolve(document.fileName))
-
-  while (true) {
-    try {
-      const entries = await fs.promises.readdir(currentDir, { withFileTypes: true })
-      const cues = (
-        await Promise.all(
-          entries
-            .filter((entry) => entry.name.endsWith('.cue'))
-            .map(async (entry) => {
-              const cuePath = path.join(currentDir, entry.name)
-              try {
-                return (await fs.promises.stat(cuePath)).isFile() ? cuePath : undefined
-              } catch {
-                return undefined
-              }
-            }),
-        )
+  try {
+    const entries = await fs.promises.readdir(currentDir, { withFileTypes: true })
+    const cues = (
+      await Promise.all(
+        entries
+          .filter((entry) => entry.name.endsWith('.cue'))
+          .map(async (entry) => {
+            const cuePath = path.join(currentDir, entry.name)
+            try {
+              return (await fs.promises.stat(cuePath)).isFile() ? cuePath : undefined
+            } catch {
+              return undefined
+            }
+          }),
       )
-        .filter((cuePath): cuePath is string => cuePath !== undefined)
-        .sort()
+    )
+      .filter((cuePath): cuePath is string => cuePath !== undefined)
+      .sort()
 
-      if (cues.length > 0) {
-        return cues[0]
-      }
-    } catch {
-      // ignore unreadable directories and continue walking upward
+    if (cues.length > 0) {
+      return cues[0]
     }
-
-    if (currentDir === workspaceRoot) {
-      break
-    }
-
-    const parentDir = path.dirname(currentDir)
-    if (parentDir === currentDir) {
-      break
-    }
-
-    currentDir = parentDir
+  } catch {
+    // ignore unreadable directories
   }
 
   return undefined

@@ -6,7 +6,7 @@
   "categories": [
     "Linters"
   ],
-  "version": "0.1.2",
+  "version": "0.1.3",
   "icon": "resources/logo.png",
   "repository": "https://github.com/rxsystms/cue-validator",
   "engines": {
