@@ -1,10 +1,10 @@
 {
   "name": "cue-validator",
   "displayName": "CUE Validator",
-  "description": "Validate YAML, JSON, TOML, and related data files against a local .cue schema.",
+  "description": "Validate YAML, JSON, and TOML against local CUE schemas in VS Code. Catch config drift early with instant feedback while you edit.",
   "publisher": "rxsystms",
   "categories": [ "Linters" ],
-  "version": "0.0.1",
+  "version": "0.1.0",
   "icon": "resources/logo.png",
   "repository": "https://github.com/rxsystms/cue-validator",
   "engines": {

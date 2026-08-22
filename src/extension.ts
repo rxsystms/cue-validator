@@ -100,6 +100,11 @@ function findCueDefinitionName(cueFile: string): string | undefined {
     const definitions = [...schemaContent.matchAll(/^\s*#([A-Za-z0-9_]+)\s*:/gm)]
       .map((match) => `#${match[1]}`);
 
+    // prefer a union entry point so a directory can mix document shapes (e.g. #BP | #Orchestrator)
+    if (definitions.includes('#Document')) {
+      return '#Document';
+    }
+
     if (definitions.includes('#BP')) {
       return '#BP';
     }
