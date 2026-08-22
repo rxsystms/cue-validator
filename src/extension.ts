@@ -159,13 +159,13 @@ function parseCueDiagnostics(output: string, targetPath: string): vscode.Diagnos
     const filePath = locationMatch[1]
     const resolvedFile = path.resolve(filePath)
     let message = 'CUE validation error'
-    for (let previousIndex = index - 1; previousIndex >= 0; previousIndex -= 1) {
-      const candidate = lines[previousIndex].trim()
+    for (let nextIndex = index + 1; nextIndex < lines.length; nextIndex += 1) {
+      const candidate = lines[nextIndex].trim()
       if (!candidate) {
         continue
       }
 
-      if (/^\s*(.+?):(\d+):(\d+)\s*$/.test(lines[previousIndex])) {
+      if (/^\s*(.+?):(\d+):(\d+)\s*$/.test(lines[nextIndex])) {
         continue
       }
 
