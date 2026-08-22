@@ -3,8 +3,10 @@
   "displayName": "CUE Validator",
   "description": "Validate YAML, JSON, and TOML against local CUE schemas in VS Code. Catch config drift early with instant feedback while you edit.",
   "publisher": "rxsystms",
-  "categories": [ "Linters" ],
-  "version": "0.1.0",
+  "categories": [
+    "Linters"
+  ],
+  "version": "0.1.2",
   "icon": "resources/logo.png",
   "repository": "https://github.com/rxsystms/cue-validator",
   "engines": {
@@ -29,8 +31,13 @@
     "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/node": "^20.14.10",
     "@types/vscode": "^1.90.0",
-    "typescript": "^5.5.4"
+    "eslint": "^10.9.0",
+    "globals": "^17.11.0",
+    "jiti": "^2.7.0",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.67.0"
   }
 }
