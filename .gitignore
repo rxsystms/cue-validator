@@ -1,9 +1,0 @@
-.DS_Store
-*.vsix
-
-old
-
-.secrets
-.env
-out
-node_modules
