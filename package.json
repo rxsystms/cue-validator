@@ -3,6 +3,7 @@
   "version": "0.1.7",
   "publisher": "rxsystms",
   "license": "LICENSE.md",
+  "repository": "https://github.com/rxsystms/cue-validator",
   "engines": {
     "vscode": "^1.90.0"
   }

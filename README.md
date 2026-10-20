@@ -10,6 +10,13 @@ Validate against a local .cue schema with support for:
 - TOML
 - as well as other related data files 
 
+## Screenshots
+
+![](./resources/screenshot1.png)
+
+![](./resources/screenshot2.png)
+
+
 ## Recommended
 
 Install Error Lens (usernamehw.errorlens) for enhanced error highlighting
