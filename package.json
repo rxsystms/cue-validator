@@ -1,9 +1,12 @@
 {
   "name": "cue-validator",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "publisher": "rxsystms",
   "license": "LICENSE.md",
-  "repository": "https://github.com/rxsystms/cue-validator",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rxsystms/cue-validator.git"
+  },
   "engines": {
     "vscode": "^1.146.0"
   }
